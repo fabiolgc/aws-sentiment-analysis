@@ -1,0 +1,132 @@
+{
+  "Comment": "A simple AWS Step Functions state machine that automates a call center support session.",
+  "StartAt": "GetTicketInfo",
+  "States": {
+    "GetTicketInfo": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:660740604559:function:zd-sentiment-analysys-get-ticketinfo",
+      "InputPath": "$.detail.ticket_event.ticket",
+      "Next": "GetLanguage"
+    },
+    "GetLanguage": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:660740604559:function:zd-sentiment-analysys-get-language",
+      "Next": "GetDocumentTopic"
+    },
+    "GetDocumentTopic": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:660740604559:function:zd-sentiment-analysis-get-topic",
+      "Next": "GetSentiment"
+    },
+    "GetSentiment": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:660740604559:function:zd-sentiment-analysys-get-sentiment",
+      "Next": "isNegative"
+    },
+    "isNegative": {
+        "Type" : "Choice",
+        "Choices": [
+          {
+            "Variable": "$.sentiment",
+            "StringEquals": "NEGATIVE",
+            "Next": "setTagsNegative"
+          },
+          {
+            "Variable": "$.sentiment",
+            "StringEquals": "POSITIVE",
+            "Next": "setTagsPositive"
+          },
+          {
+            "Variable": "$.sentiment",
+            "StringEquals": "NEUTRAL",
+            "Next": "setTagsPositive"
+          },
+          {
+            "Variable": "$.sentiment",
+            "StringEquals": "MIXED",
+            "Next": "setTagsPositive"
+          }
+        ],
+       "Default" : "ClosedOrNotNegative"
+    },
+    "setTagsPositive": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:660740604559:function:zd-sentiment-analysys-set-tags",
+      "Next": "ClosedOrNotNegative"
+    },
+    "setTagsNegative": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:660740604559:function:zd-sentiment-analysys-set-tags",
+      "Next": "isClosed"
+    },
+     "GetZendeskSLAWaitTime": {
+        "Type" : "Choice",
+        "Choices": [
+          {
+            "Variable": "$.priority",
+            "StringEquals": "normal",
+            "Next": "ZendeskSLAHighWait"
+          },
+          {
+            "Variable": "$.priority",
+            "StringEquals": "high",
+            "Next": "ZendeskSLAUrgentWait"
+          },
+               {
+            "Variable": "$.priority",
+            "StringEquals": "urgent",
+            "Next": "FinalEscalationState"
+          }
+        ],
+       "Default" : "ZendeskSLANormalWait"
+    },
+    "FinalEscalationState": {
+      "Type": "Succeed",
+      "Comment": "Ticket cannot be escalated further"
+
+    },
+    "setPriority": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:660740604559:function:zd-sentiment-analysys-set-priority",
+      "Next": "isClosed"
+    },
+    "ZendeskSLANormalWait": {
+       "Type": "Wait",
+       "SecondsPath": "$.ZendeskSLA.NormalWait",
+       "Next": "setPriority"
+    },
+    "ZendeskSLAHighWait": {
+       "Type": "Wait",
+       "SecondsPath": "$.ZendeskSLA.HighWait",
+       "Next": "setPriority"
+    },
+    "ZendeskSLAUrgentWait": {
+       "Type": "Wait",
+       "SecondsPath": "$.ZendeskSLA.UrgentWait",
+       "Next": "setPriority"
+    },
+    "isClosed": {
+       "Type" : "Choice",
+        "Choices": [
+          {
+            "Or": [
+               {
+                 "Variable": "$.status",
+                 "StringEquals": "new"
+               },
+               {
+                 "Variable": "$.status",
+                "StringEquals": "open"
+               }
+            ],
+            "Next": "GetZendeskSLAWaitTime"
+          }
+        ],
+      "Default": "ClosedOrNotNegative"
+    },
+    "ClosedOrNotNegative": {
+      "Type": "Pass",
+      "End": true
+    }
+  }
+}
