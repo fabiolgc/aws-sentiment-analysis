@@ -35,4 +35,8 @@ In order to create your custom endpoint you will need to extract your ticket dat
 
 ## 4. Zendesk App
 
-- zd-sentiment-analysis-app: You will need to compress the app files in order to upload on your environment. Feel free to make changes or improve this app. This app is just used for demos and examples, please do not use in production environment. To use in production please follow the Zendesk App Framework recommendations to avoid vulnerabilities and future security problems.
+- zd-sentiment-analysis-app: You will need to compress the app files in order to upload on your environment. Feel free to make changes or improve this app. This app is just used for demos and examples, please do not use in production environment.
+
+> Released App: https://github.com/fabiolgc/aws-sentiment-analysis/releases/tag/zendesk-app-v1.0
+
+To use in production please follow the Zendesk App Framework recommendations to avoid vulnerabilities and future security problems. Be careful please!!!! :)
