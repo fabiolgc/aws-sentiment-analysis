@@ -1,0 +1,32 @@
+<div id="content">
+  <div class="ui main">
+    <div class="ui container">
+      <h2 class="ui header">
+        {{#ifEquals sentimento "POSITIVO"}} <img src="smile-positive.png" class="ui circular image"> {{/ifEquals}}
+        {{#ifEquals sentimento "NEGATIVO"}} <img src="smile-negative.png" class="ui circular image"> {{/ifEquals}}
+        {{#ifEquals sentimento "NEUTRO"}} <img src="smile-neutral.png" class="ui circular image"> {{/ifEquals}}
+        {{#ifEquals sentimento "EQUILIBRADO"}} <img src="smile-mixed.png" class="ui circular image"> {{/ifEquals}}
+        <div class="content">
+          <span id="ticket-requestername">{{sentimento}}</span>
+        </div>
+      </h2>
+    </div>
+  </div>
+  <div class="ui segment">
+    <div class="ui segments">
+      <div class="ui segment center aligned">
+        <p>
+          {{#ifEquals sentimento "NEGATIVO"}}<span class="u-bg-red-600 u-fg-white u-display-block">Score do Sentimento {{score_sentimento}}</span>{{/ifEquals}}
+          {{#ifEquals sentimento "POSITIVO"}}<span class="u-bg-green-600 u-fg-white u-display-block">Score do Sentimento {{score_sentimento}}</span>{{/ifEquals}}
+          {{#ifEquals sentimento "NEUTRO"}}<span class="u-bg-grey-600 u-fg-white u-display-block">Score do Sentimento {{score_sentimento}}</span>{{/ifEquals}}
+          {{#ifEquals sentimento "EQUILIBRADO"}}<span class="u-bg-yellow-600 u-fg-white u-display-block">Score do Sentimento {{score_sentimento}}</span>{{/ifEquals}}
+        </p>
+      </div>
+      <div class="ui segment center aligned">
+        <p>
+          <span>Score do Cliente {{score_cliente}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

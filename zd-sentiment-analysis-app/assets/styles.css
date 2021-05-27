@@ -1,0 +1,9 @@
+.container {
+	overflow: hidden;
+	position: relative;
+}
+
+#app-content td {
+	font-size: 12px;
+	padding-top: 2px;
+}

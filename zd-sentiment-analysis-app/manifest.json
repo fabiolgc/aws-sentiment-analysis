@@ -1,0 +1,56 @@
+{
+  "name": "Sentment Analysis",
+  "author": {
+    "name": "Fábio Gonçalves",
+    "email": "fabio@zendesk.com",
+    "url": ""
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "ticket_sidebar": "assets/iframe.html",
+      "user_sidebar":"assets/iframe.html"
+    }
+  },
+  "parameters": [
+    {
+      "name": "prediction_title",
+      "type": "text",
+      "required": false,
+      "default": "Attrition Probability"
+    },
+    {
+      "name": "prediction_probability",
+      "type": "text",
+      "required": false,
+      "default": "35%"
+    },
+    {
+      "name":"events_title",
+      "type":"text",
+      "required":false,
+      "default": "Attrition Events"
+    },
+    {
+      "name":"events_description",
+      "type":"text",
+      "required":false,
+      "default": "Multiple Credits Hits,Online Refinance Calculator,Lower Rates"
+    },
+    {
+      "name":"next_action_title",
+      "type":"text",
+      "required":false,
+      "default": "Customer Next Action"
+    },
+    {
+      "name":"next_action_description",
+      "type":"text",
+      "required":false,
+      "default": "Loan Refinance"
+    }
+  ],
+  "version": "2.0",
+  "frameworkVersion": "2.0"
+}
